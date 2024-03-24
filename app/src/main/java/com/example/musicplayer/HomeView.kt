@@ -28,7 +28,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavBackStackEntry
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -40,13 +40,21 @@ import kotlinx.coroutines.launch
 fun HomeView(){
     val scaffoldState:ScaffoldState= rememberScaffoldState()
     val scope:CoroutineScope= rememberCoroutineScope()
+    val viewModel:MainViewModel = viewModel()
 
+    //The NavController is responsible for managing the navigation flow within the app.
     val controller:NavController= rememberNavController()
+    /* A back stack entry represents a single destination in the back stack of a NavController.
+    The back stack is a data structure that keeps track of the screens that the user has visited in
+     a hierarchical manner. */
     val navBackStackEntry by controller.currentBackStackEntryAsState()
+    //This line extracts the route of the current destination from the navBackStackEntry.
+    // it track the current route
     val currentRoute = navBackStackEntry?.destination?.route
 
+
     val title = remember {
-        mutableStateOf("")
+        mutableStateOf(viewModel.currentScreen.value.title)
     }
 
     Scaffold(
@@ -93,9 +101,7 @@ fun HomeView(){
         }
 
     ) {
-        Text(text = "Home",
-            modifier = Modifier.padding(it)
-            )
+        Navigation(viewModel = viewModel, pd =it )
     }
 }
 
