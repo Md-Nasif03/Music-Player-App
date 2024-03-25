@@ -56,6 +56,12 @@ fun AlertDialogScreen(isOpen: MutableState<Boolean>){
                     TextField(value = "",
                         onValueChange = {},
                         modifier = Modifier.padding(top = 10.dp),
+                        label = { Text(text = "Name")}
+                    )
+
+                    TextField(value = "",
+                        onValueChange = {},
+                        modifier = Modifier.padding(top = 10.dp),
                         label = { Text(text = "Email")}
                         )
 
