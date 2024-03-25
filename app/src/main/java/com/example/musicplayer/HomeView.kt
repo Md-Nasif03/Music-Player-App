@@ -89,7 +89,8 @@ fun HomeView(){
                             scaffoldState.drawerState.close()
                         }
                         if (item.route=="add_account"){
-                            //open dialog
+                            // this function update the openDialog value in viewModel
+                            viewModel.OpenDialoge()
                         }else{
                             controller.navigate(item.route)
                             title.value=item.title
@@ -102,6 +103,7 @@ fun HomeView(){
 
     ) {
         Navigation(viewModel = viewModel, pd =it )
+        AlertDialogScreen(isOpen = viewModel.openDialog)
     }
 }
 
