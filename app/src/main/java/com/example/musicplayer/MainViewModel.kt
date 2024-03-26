@@ -6,7 +6,7 @@ import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 
 class MainViewModel:ViewModel(){
-    private val _currentScreen:MutableState<Screen> = mutableStateOf(Screen.AddAccount)
+    private val _currentScreen:MutableState<Screen> = mutableStateOf(Screen.Home)
 
     private val _openDialog =  mutableStateOf(false)
     val openDialog =_openDialog
