@@ -1,4 +1,5 @@
 [versions]
+accompanistNavigationAnimation = "0.16.0"
 agp = "8.3.1"
 kotlin = "1.9.0"
 coreKtx = "1.12.0"
@@ -14,6 +15,7 @@ uiAndroid = "1.6.4"
 uiToolingPreview = "1.6.4"
 
 [libraries]
+accompanist-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanistNavigationAnimation" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-material = { module = "androidx.compose.material:material", version.ref = "material" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }

@@ -60,7 +60,7 @@ fun HomeView(){
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Home", color = Color.White) },
+                title = { Text(text = title.value, color = Color.White) },
                 navigationIcon = {
                     IconButton(onClick = {
                         scope.launch {
@@ -102,7 +102,7 @@ fun HomeView(){
         }
 
     ) {
-        Navigation(viewModel = viewModel, pd =it )
+        Navigation(controller,viewModel = viewModel, pd =it )
         AlertDialogScreen(isOpen = viewModel.openDialog)
     }
 }

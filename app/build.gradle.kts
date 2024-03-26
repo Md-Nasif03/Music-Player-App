@@ -55,6 +55,8 @@ dependencies {
     implementation(libs.androidx.material)
     implementation(libs.androidx.ui.android)
     implementation(libs.androidx.navigation.compose)
+    //animation
+    implementation(libs.accompanist.navigation.animation)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
