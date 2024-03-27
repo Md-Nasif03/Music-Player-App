@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.example.musicplayer.ui.theme.MusicPlayerTheme
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.ui.draw.shadow
 
 
 @Composable
@@ -30,7 +31,7 @@ fun AccountScreen(){
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 10.dp, start = 5.dp, end = 5.dp),
+            .padding(top = 10.dp, start = 5.dp, end = 5.dp).shadow(4.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
