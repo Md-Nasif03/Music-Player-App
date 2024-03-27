@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.BottomNavigation
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
@@ -66,6 +67,7 @@ fun HomeView(){
 
 
     Scaffold(
+        bottomBar = {},
         topBar = {
             TopAppBar(
                 title = { Text(text = title.value, color = Color.White) },

@@ -20,3 +20,7 @@ val screensInDrawer = listOf(
     Screen.Subscription,
     Screen.AddAccount
 )
+
+val screenInBottom = listOf(
+    Screen.Home,
+)
