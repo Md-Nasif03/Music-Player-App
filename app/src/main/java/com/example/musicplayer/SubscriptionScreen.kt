@@ -34,12 +34,13 @@ fun SubscriptionScreen(){
     Card(
         modifier = Modifier
             .wrapContentSize()
-            .padding(5.dp),
+            .padding(5.dp)
+            .clip(RoundedCornerShape(15.dp)),
         shape = MaterialTheme.shapes.medium,
-        backgroundColor = colorResource(id = R.color.CardColour),
+        backgroundColor = Color.Transparent,
         contentColor = Color.White,
-        border = BorderStroke(1.dp, Color.Black),
-        elevation = 4.dp
+        border = BorderStroke(1.dp, Color.Transparent),
+        elevation = 2.dp
     ) {
         Column (
             modifier = Modifier
@@ -71,7 +72,7 @@ fun SubscriptionScreen(){
                     Text(text = "Expired On: May14,2023",
                         fontSize = 10.sp ,
                         fontWeight = FontWeight.Light,
-                        color = Color.DarkGray
+                        color = Color.White
                         )
                 }
                 Text(text = "$0.00")
@@ -86,14 +87,14 @@ fun SubscriptionScreen(){
                 Text(text = "Re-unlock a world of limitless music!",
                     fontSize = 12.sp ,
                     fontWeight = FontWeight.Bold,
-                    color = Color.DarkGray
+                    color = Color.White
                 )
                 Button(onClick = { },
-                    elevation = ButtonDefaults.elevation(25.dp),
-                    modifier = Modifier.clip(RoundedCornerShape(20.dp)),
-                    border = BorderStroke(1.dp, Color.Transparent),
+                    elevation = ButtonDefaults.elevation(10.dp),
+                    modifier = Modifier.clip(RoundedCornerShape(100)),
+                    border = BorderStroke(1.dp, Color.Blue),
                     colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Color.Red
+                        backgroundColor = Color.Transparent
                     )
                     ) {
                     Text(text = "RENEW NOW")
@@ -107,12 +108,12 @@ fun SubscriptionScreen(){
                 Text(text = "See All My Transaction",
                     fontSize = 12.sp ,
                     fontWeight = FontWeight.Bold,
-                    color = Color.DarkGray
+                    color = Color.White
                 )
                 IconButton(onClick = { /*TODO*/ }) {
                     Icon(imageVector = Icons.Default.KeyboardArrowRight,
                         contentDescription = "",
-                        tint = Color.DarkGray
+                        tint = Color.White
                         )
                 }
             }

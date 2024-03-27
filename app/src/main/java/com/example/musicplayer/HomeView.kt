@@ -1,8 +1,11 @@
 package com.example.musicplayer
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,8 +25,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,6 +40,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.musicplayer.ui.theme.MusicPlayerTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import androidx.compose.ui.res.imageResource
+
 
 @Composable
 fun HomeView(){
@@ -57,6 +64,7 @@ fun HomeView(){
         mutableStateOf(viewModel.currentScreen.value.title)
     }
 
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -74,7 +82,7 @@ fun HomeView(){
                         )
                     }
                 },
-                backgroundColor = Color.Red,
+                backgroundColor = Color.Black,
                 elevation = 3.dp
             )
         },
@@ -102,10 +110,22 @@ fun HomeView(){
         }
 
     ) {
+        Box (
+            modifier = Modifier.fillMaxSize()
+        ){
+            Image(
+                painter = painterResource(id = R.drawable.bc53745d57bab8080e975d666d5e3240),
+                contentDescription = "Background",
+                contentScale = ContentScale.FillBounds,
+                alignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
         Navigation(controller,viewModel = viewModel, pd =it )
         AlertDialogScreen(isOpen = viewModel.openDialog)
     }
 }
+
 
 
 @Composable

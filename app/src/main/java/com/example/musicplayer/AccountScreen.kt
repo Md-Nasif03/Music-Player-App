@@ -43,7 +43,7 @@ fun AccountScreen(){
                 verticalAlignment = Alignment.CenterVertically
             ){
                 Icon(
-                    tint = Color.Black,
+                    tint = Color.White,
                     painter = painterResource(id = R.drawable.baseline_account_circle_24),
                     contentDescription = "Account"
                 )
@@ -54,13 +54,13 @@ fun AccountScreen(){
                 ) {
                     Text(
                         text = "Md Nasif",
-                        color = Color.Black,
+                        color = Color.White,
                         fontStyle = FontStyle.Italic,
                         fontWeight = FontWeight.Bold,
                         fontFamily = FontFamily.Serif
                     )
                     Text(
-                        color = Color.Black,
+                        color = Color.White,
                         text = "mdnasif03@gmail.comm",
                         fontStyle = FontStyle.Italic,
                         fontWeight = FontWeight.Thin,
@@ -72,7 +72,7 @@ fun AccountScreen(){
                 onClick = { },
             ) {
                 Icon(
-                    tint = Color.Black,
+                    tint = Color.White,
                     imageVector = Icons.Default.KeyboardArrowRight,
                     contentDescription = "Account Detail"
                 )
