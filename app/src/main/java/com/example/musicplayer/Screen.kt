@@ -23,4 +23,6 @@ val screensInDrawer = listOf(
 
 val screenInBottom = listOf(
     Screen.Home,
+    Screen.Library,
+    Screen.Browse
 )

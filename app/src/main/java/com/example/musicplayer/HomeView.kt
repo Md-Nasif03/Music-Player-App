@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
@@ -64,10 +66,33 @@ fun HomeView(){
     val title = remember {
         mutableStateOf(viewModel.currentScreen.value.title)
     }
+    val bottomBar:@Composable ()->Unit ={
+        if (viewModel.currentScreen is Screen || viewModel.currentScreen.value== Screen.Home ){
+            BottomNavigation(
+                modifier = Modifier.wrapContentSize(),
+                backgroundColor = Color.Transparent,
+                elevation = 10.dp
+
+                ) {
+                screenInBottom.forEach {item->
+                    BottomNavigationItem(
+                        selected = currentRoute == item.route,
+                        onClick = { controller.navigate(item.route)},
+                        icon = { item.icon?.let { painterResource(id = it) }
+                            ?.let { Icon(painter = it, contentDescription = item.title ) } },
+                        label = { Text(text = item.title)},
+                        selectedContentColor = Color.White,
+                        unselectedContentColor = Color.Green
+                        )
+                }
+
+            }
+        }
+    }
 
 
     Scaffold(
-        bottomBar = {},
+        bottomBar = {bottomBar()},
         topBar = {
             TopAppBar(
                 title = { Text(text = title.value, color = Color.White) },
@@ -150,6 +175,17 @@ fun DrawerItem(
     }
 }
 
+/*
+when (viewModel.currentScreen.value) {
+    Screen.Home, Screen.Profile, Screen.Settings -> {
+        // Display the bottom navigation bar
+    }
+    else -> {
+        // Do not display the bottom navigation bar
+    }
+}
+ */
+
 
 @Preview(showBackground = true)
 @Composable
@@ -158,3 +194,4 @@ fun HomeViewPreview() {
         HomeView()
     }
 }
+

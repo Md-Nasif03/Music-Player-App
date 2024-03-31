@@ -37,12 +37,21 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Navigation(navControl:NavController,viewModel: MainViewModel,pd:PaddingValues ){
-    NavHost(navController = navControl as NavHostController , startDestination = Screen.Account.route,Modifier.padding(pd)) {
+    NavHost(navController = navControl as NavHostController , startDestination = Screen.Home.route,Modifier.padding(pd)) {
         composable(Screen.Account.route){
             AccountScreen()
         }
         composable(Screen.Subscription.route){
             SubscriptionScreen()
+        }
+        composable(Screen.Home.route){
+
+        }
+        composable(Screen.Library.route){
+
+        }
+        composable(Screen.Browse.route){
+
         }
 
     }
