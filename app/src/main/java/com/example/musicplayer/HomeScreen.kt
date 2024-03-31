@@ -26,6 +26,7 @@ import com.example.musicplayer.ui.theme.MusicPlayerTheme
 @Composable
 fun HomeScreen(){
     val categories = listOf("Hits","happy","workout","Running","TGIF")
+    val categ = listOf("Hi","hap","work","Run","TG")
     //groupBy{it[0]} sort the string according to alphabeted
     val grouped = listOf("New release","Favorites","Top Rated").groupBy { it[0] }
     LazyColumn{
@@ -36,10 +37,19 @@ fun HomeScreen(){
             stickyHeader {
                 //it stick the text
                 Text(text = it.value[0], modifier = Modifier.padding(15.dp))
-                LazyRow{
-                    items(categories){
-                        cat->
-                        BrowserItem(text = cat)
+                // for different group different item
+                if (it.value[0] == "Favorites") {
+                    LazyRow {
+                        items(categ) { cat ->
+                            BrowserItem(text = cat)
+                        }
+                    }
+                }else{
+                    LazyRow{
+                        items(categories){
+                                cat->
+                            BrowserItem(text = cat)
+                        }
                     }
                 }
             }
