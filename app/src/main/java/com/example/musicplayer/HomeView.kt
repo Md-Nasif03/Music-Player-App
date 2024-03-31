@@ -1,8 +1,11 @@
 package com.example.musicplayer
 
+import android.widget.Toast
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,27 +14,33 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,9 +52,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.musicplayer.ui.theme.MusicPlayerTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import androidx.compose.ui.res.imageResource
 
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeView(){
     val scaffoldState:ScaffoldState= rememberScaffoldState()
@@ -63,11 +72,11 @@ fun HomeView(){
     val currentRoute = navBackStackEntry?.destination?.route
 
 
-    val title = remember {
-        mutableStateOf(viewModel.currentScreen.value.title)
-    }
+
+    //Bottom bar
     val bottomBar:@Composable ()->Unit ={
-        if (viewModel.currentScreen is Screen || viewModel.currentScreen.value== Screen.Home ){
+        // condition for when bottom bar will show
+        if ( viewModel.currentScreen.value in screensInDrawer || viewModel.currentScreen.value in screenInBottom ){
             BottomNavigation(
                 modifier = Modifier.wrapContentSize(),
                 backgroundColor = Color.Transparent,
@@ -77,7 +86,9 @@ fun HomeView(){
                 screenInBottom.forEach {item->
                     BottomNavigationItem(
                         selected = currentRoute == item.route,
-                        onClick = { controller.navigate(item.route)},
+                        onClick = { controller.navigate(item.route)
+                                  viewModel.setScreen(item)
+                                  },
                         icon = { item.icon?.let { painterResource(id = it) }
                             ?.let { Icon(painter = it, contentDescription = item.title ) } },
                         label = { Text(text = item.title)},
@@ -89,69 +100,143 @@ fun HomeView(){
             }
         }
     }
-
-
-    Scaffold(
-        bottomBar = {bottomBar()},
-        topBar = {
-            TopAppBar(
-                title = { Text(text = title.value, color = Color.White) },
-                navigationIcon = {
-                    IconButton(onClick = {
-                        scope.launch {
-                            scaffoldState.drawerState.open()
-                        }
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.AccountCircle,
-                            contentDescription = "Menu",
-                            tint = Color.White
-                        )
-                    }
-                },
-                backgroundColor = Color.Black,
-                elevation = 3.dp
-            )
-        },
-        scaffoldState = scaffoldState,
-        drawerContent = {
-            LazyColumn(
-                modifier = Modifier.padding(15.dp)
-            ) {
-                items(screensInDrawer){item->
-                    DrawerItem(selected = currentRoute==item.route, item = item) {
-                        scope.launch {
-                            scaffoldState.drawerState.close()
-                        }
-                        if (item.route=="add_account"){
-                            // this function update the openDialog value in viewModel
-                            viewModel.OpenDialoge()
-                        }else{
-                            controller.navigate(item.route)
-                            title.value=item.title
-                        }
-                    }
-                    
-                }
+    val modalSheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden,
+        confirmValueChange = {it != ModalBottomSheetValue.HalfExpanded}
+    )
+    val context= LocalContext.current
+    ModalBottomSheetLayout(
+        sheetState = modalSheetState,
+        sheetShape = RoundedCornerShape(5),
+        sheetElevation = 4.dp,
+        sheetContent = {
+        //how sheet look like
+        LazyColumn{
+            items(BottomSheetLayoutItems){
+                MoreBottomSheet(
+                    onClick = { Toast.makeText(context,"Sorry",Toast.LENGTH_SHORT).show() },
+                    bottomSheetLayoutItem = it)
             }
         }
+    }) {
+        //Scaffold under this
+        //because bottom sheet stay under this
+        Scaffold(
+            bottomBar = {bottomBar()},
+            topBar = {
+                TopAppBar(
+                    title = { Text(text = viewModel.currentScreen.value.title, color = Color.White) },
+                    navigationIcon = {
+                        IconButton(onClick = {
+                            scope.launch {
+                                scaffoldState.drawerState.open()
+                            }
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.AccountCircle,
+                                contentDescription = "Menu",
+                                tint = Color.White
+                            )
+                        }
+                    },
+                    //right corner
+                    actions = {
+                              IconButton(onClick = {
+                                  scope.launch {
+                                      if (modalSheetState.isVisible){
+                                          modalSheetState.hide()
+                                      }else{
+                                          modalSheetState.show()
+                                      }
+                                  }
+                              }) {
+                                  Icon(imageVector = Icons.Default.MoreVert,
+                                      contentDescription = "Bottom sheet layout",
+                                      tint = Color.White
+                                      )
+                              }
+                    },
+                    backgroundColor = Color.Black,
+                    elevation = 3.dp
+                )
+            },
+            scaffoldState = scaffoldState,
+            drawerContent = {
+                LazyColumn(
+                    modifier = Modifier.padding(15.dp)
+                ) {
+                    items(screensInDrawer){item->
+                        DrawerItem(selected = currentRoute==item.route, item = item) {
+                            scope.launch {
+                                scaffoldState.drawerState.close()
+                            }
+                            if (item.route=="add_account"){
+                                // this function update the openDialog value in viewModel
+                                viewModel.OpenDialoge()
+                            }else{
+                                controller.navigate(item.route)
+                                viewModel.setScreen(item)
+                            }
+                        }
 
-    ) {
-        Box (
-            modifier = Modifier.fillMaxSize()
-        ){
-            Image(
-                painter = painterResource(id = R.drawable.bc53745d57bab8080e975d666d5e3240),
-                contentDescription = "Background",
-                contentScale = ContentScale.FillBounds,
-                alignment = Alignment.Center,
+                    }
+                }
+            }
+
+        ) {
+            Box (
                 modifier = Modifier.fillMaxSize()
-            )
+            ){
+                Image(
+                    painter = painterResource(id = R.drawable.bc53745d57bab8080e975d666d5e3240),
+                    contentDescription = "Background",
+                    contentScale = ContentScale.FillBounds,
+                    alignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            Navigation(controller,viewModel = viewModel, pd =it )
+            AlertDialogScreen(isOpen = viewModel.openDialog)
         }
-        Navigation(controller,viewModel = viewModel, pd =it )
-        AlertDialogScreen(isOpen = viewModel.openDialog)
     }
 }
+//Design of bottom sheet
+@Composable
+fun MoreBottomSheet(onClick:()->Unit,
+                    bottomSheetLayoutItem: BottomSheetLayoutItem
+){
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp),
+        backgroundColor = Color.Red,
+        contentColor = Color.White,
+        elevation = 4.dp
+    ) {
+        Row (
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth()
+                .clickable { onClick() },
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+        ){
+            Icon(painter = painterResource(id = bottomSheetLayoutItem.icon),
+                contentDescription = bottomSheetLayoutItem.title)
+            Text(text = bottomSheetLayoutItem.title, modifier = Modifier.padding(start = 10.dp))
+        }
+    }
+
+}
+data class BottomSheetLayoutItem (
+    @DrawableRes val icon:Int,
+    val title:String
+)
+val BottomSheetLayoutItems= listOf(
+    BottomSheetLayoutItem(R.drawable.baseline_settings_24,"Settings"),
+    BottomSheetLayoutItem(R.drawable.baseline_share_24,"Share"),
+    BottomSheetLayoutItem(R.drawable.baseline_help_24,"Help")
+)
 
 
 

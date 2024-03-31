@@ -1,6 +1,5 @@
 package com.example.musicplayer
 
-import android.content.Context
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
@@ -15,7 +14,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.sharp.KeyboardArrowRight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -61,7 +60,7 @@ fun DisgnLibraryItem(libraryScreenItem: LibraryScreenItem,onClick:()->Unit){
             }
             IconButton(onClick = onClick) {
                 Icon(
-                    imageVector =Icons.Default.KeyboardArrowRight ,
+                    imageVector =Icons.AutoMirrored.Sharp.KeyboardArrowRight,
                     contentDescription ="Next" )
             }
         }
@@ -73,7 +72,7 @@ data class LibraryScreenItem(
     val title:String
 )
 
-val LibraryScreenItems= listOf<LibraryScreenItem>(
+val LibraryScreenItems= listOf(
     LibraryScreenItem(R.drawable.baseline_music_note_24,"Playlist"),
     LibraryScreenItem(R.drawable.baseline_headset_mic_24,"Artist"),
     LibraryScreenItem(R.drawable.baseline_album_24,"Album")
