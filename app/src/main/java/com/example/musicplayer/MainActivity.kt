@@ -45,7 +45,7 @@ fun Navigation(navControl:NavController,viewModel: MainViewModel,pd:PaddingValue
             SubscriptionScreen()
         }
         composable(Screen.Home.route){
-
+            HomeScreen()
         }
         composable(Screen.Library.route){
 
