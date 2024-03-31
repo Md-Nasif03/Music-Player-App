@@ -1,14 +1,13 @@
 package com.example.musicplayer
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material3.Text
@@ -22,34 +21,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.musicplayer.ui.theme.MusicPlayerTheme
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomeScreen(){
-    val categories = listOf("Hits","happy","workout","Running","TGIF")
-    //groupBy{it[0]} sort the string according to alphabeted
-    val grouped = listOf("New release","Favorites","Top Rated").groupBy { it[0] }
-    LazyColumn{
-        /* The grouped.forEach method in Kotlin is used to iterate over a
-        collection of elements that are grouped together. It takes a lambda expression as an argument,
-        which is executed for each group in the collection.*/
-        grouped.forEach{
-            stickyHeader {
-                //it stick the text
-                Text(text = it.value[0], modifier = Modifier.padding(15.dp))
-                LazyRow{
-                    items(categories){
-                        cat->
-                        BrowserItem(text = cat)
-                    }
-                }
-            }
+fun BrowseScreen(){
+    val categories = listOf("Hits","happy","workout","Running","TGIF","My Fvrt","Top Singer","Assamese")
+    LazyVerticalGrid(columns = GridCells.Fixed(2)){
+        items(categories){
+            cat->
+            BrowserItems(text = cat)
         }
     }
 }
 
-
 @Composable
-fun BrowserItem(
+fun BrowserItems(
     text:String
 ){
     Card(
@@ -71,11 +55,10 @@ fun BrowserItem(
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
-fun HomeScreenPreview() {
+fun BrowseScreenPreview() {
     MusicPlayerTheme {
-        HomeScreen()
+        BrowseScreen()
     }
 }

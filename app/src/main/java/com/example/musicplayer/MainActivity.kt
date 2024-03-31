@@ -51,7 +51,7 @@ fun Navigation(navControl:NavController,viewModel: MainViewModel,pd:PaddingValue
 
         }
         composable(Screen.Browse.route){
-
+            BrowseScreen()
         }
 
     }
