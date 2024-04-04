@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("kotlin-kapt")
 }
 
 android {
@@ -50,6 +51,22 @@ android {
 }
 
 dependencies {
+
+    //Room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.paging.common.android)
+    kapt("androidx.room:room-compiler:2.6.1")
+    //kotlin extensions and coroutines support for room
+    implementation(libs.androidx.room.ktx)
+    //Coroutines
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+    //coroutine lifecycle scopes
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation (libs.androidx.foundation)
+
+
 
     implementation(libs.ui.tooling.preview)
     implementation(libs.androidx.material)

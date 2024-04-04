@@ -34,10 +34,12 @@ import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -49,6 +51,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.musicplayer.Data.AccountDetails
 import com.example.musicplayer.ui.theme.MusicPlayerTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -57,9 +60,20 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomeView(){
+    val gradient=Brush.horizontalGradient(
+        colors = listOf(
+            Color.Red,
+            Color.Black,
+            colorResource(id = R.color.purple_700)
+        )
+    )
+
     val scaffoldState:ScaffoldState= rememberScaffoldState()
     val scope:CoroutineScope= rememberCoroutineScope()
     val viewModel:MainViewModel = viewModel()
+
+    val accountDetails=viewModel.getAccountDetail(1).collectAsState(initial = null)
+
 
     //The NavController is responsible for managing the navigation flow within the app.
     val controller:NavController= rememberNavController()
@@ -111,7 +125,9 @@ fun HomeView(){
         sheetElevation = 4.dp,
         sheetContent = {
         //how sheet look like
-        LazyColumn{
+        LazyColumn(
+            modifier = Modifier.background(gradient)
+        ){
             items(BottomSheetLayoutItems){
                 MoreBottomSheet(
                     onClick = { Toast.makeText(context,"Sorry",Toast.LENGTH_SHORT).show() },
@@ -125,7 +141,17 @@ fun HomeView(){
             bottomBar = {bottomBar()},
             topBar = {
                 TopAppBar(
-                    title = { Text(text = viewModel.currentScreen.value.title, color = Color.White) },
+                    title = { Text(
+                        text = if (viewModel.currentScreen.value.title=="Home"){
+                             if (accountDetails.value?.name==null){
+                                 "Hello! Dost"
+                             }else{
+                                 "Hello! ${accountDetails.value?.name}"
+                             }
+                        }else{
+                            viewModel.currentScreen.value.title
+                        },
+                        color = Color.White) },
                     navigationIcon = {
                         IconButton(onClick = {
                             scope.launch {
@@ -156,14 +182,16 @@ fun HomeView(){
                                       )
                               }
                     },
-                    backgroundColor = Color.Black,
+                    backgroundColor = colorResource(id = R.color.black),
                     elevation = 3.dp
                 )
             },
             scaffoldState = scaffoldState,
             drawerContent = {
                 LazyColumn(
-                    modifier = Modifier.padding(15.dp)
+                    modifier = Modifier
+                        .padding(15.dp)
+                        .background(gradient)
                 ) {
                     items(screensInDrawer){item->
                         DrawerItem(selected = currentRoute==item.route, item = item) {
@@ -195,8 +223,8 @@ fun HomeView(){
                     modifier = Modifier.fillMaxSize()
                 )
             }
-            Navigation(controller,viewModel = viewModel, pd =it )
-            AlertDialogScreen(isOpen = viewModel.openDialog)
+            Navigation(controller,viewModel = viewModel, pd =it)
+            AlertDialogScreen(isOpen = viewModel.openDialog,viewModel)
         }
     }
 }
@@ -209,7 +237,7 @@ fun MoreBottomSheet(onClick:()->Unit,
         modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp),
-        backgroundColor = Color.Red,
+        backgroundColor = Color.Transparent,
         contentColor = Color.White,
         elevation = 4.dp
     ) {

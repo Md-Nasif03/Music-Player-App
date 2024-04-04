@@ -15,6 +15,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.musicplayer.Data.AccountDetails
 import com.example.musicplayer.ui.theme.MusicPlayerTheme
 
 
@@ -36,16 +37,16 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Navigation(navControl:NavController,viewModel: MainViewModel,pd:PaddingValues ){
+fun Navigation(navControl:NavController,viewModel: MainViewModel,pd:PaddingValues){
     NavHost(navController = navControl as NavHostController , startDestination = Screen.Home.route,Modifier.padding(pd)) {
         composable(Screen.Account.route){
-            AccountScreen()
+            AccountScreen(viewModel)
         }
         composable(Screen.Subscription.route){
             SubscriptionScreen()
         }
         composable(Screen.Home.route){
-            HomeScreen()
+            HomeScreen(navControl)
         }
         composable(Screen.Library.route){
             LibraryScreen()

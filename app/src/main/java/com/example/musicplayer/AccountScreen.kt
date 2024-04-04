@@ -23,15 +23,21 @@ import androidx.compose.ui.unit.dp
 import com.example.musicplayer.ui.theme.MusicPlayerTheme
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.draw.shadow
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.musicplayer.Data.AccountDetails
 
 
 @Composable
-fun AccountScreen(){
+fun AccountScreen(viewModel: MainViewModel){
+
+    val accountDetails=viewModel.getAccountDetail(1).collectAsState(initial = null)
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 10.dp, start = 5.dp, end = 5.dp).shadow(4.dp)
+            .padding(top = 10.dp, start = 5.dp, end = 5.dp)
+            .shadow(4.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -53,20 +59,24 @@ fun AccountScreen(){
                         .wrapContentSize()
                         .padding(5.dp)
                 ) {
-                    Text(
-                        text = "Md Nasif",
-                        color = Color.White,
-                        fontStyle = FontStyle.Italic,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = FontFamily.Serif
-                    )
-                    Text(
-                        color = Color.White,
-                        text = "mdnasif03@gmail.comm",
-                        fontStyle = FontStyle.Italic,
-                        fontWeight = FontWeight.Thin,
-                        fontFamily = FontFamily.Serif
-                    )
+                    accountDetails.value?.let {
+                        Text(
+                            text = it.name,
+                            color = Color.White,
+                            fontStyle = FontStyle.Italic,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = FontFamily.Serif
+                        )
+                    }
+                    accountDetails.value?.let {
+                        Text(
+                            color = Color.White,
+                            text = it.email,
+                            fontStyle = FontStyle.Italic,
+                            fontWeight = FontWeight.Thin,
+                            fontFamily = FontFamily.Serif
+                        )
+                    }
                 }
             }
             IconButton(
@@ -88,6 +98,6 @@ fun AccountScreen(){
 @Composable
 fun AccountScreenPreview() {
     MusicPlayerTheme {
-        AccountScreen()
+        AccountScreen(viewModel())
     }
 }
